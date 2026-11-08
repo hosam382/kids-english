@@ -5,106 +5,181 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Kids English</title>
 <meta name="description" content="تعلم الإنجليزي للأطفال الصغار بالصور والصوت">
-<meta name="theme-color" content="#ffb84d">
+<meta name="theme-color" content="#ffc93c">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" href="font-kids.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Kids English">
 <style>
+@font-face{font-family:Kids;src:url(font-kids.woff2) format("woff2");font-weight:400 800;font-display:swap}
 :root{
-  --bg:#fff6d9; --ink:#3a2a1a; --soft:#8a6d4b; --card:#ffffff; --shadow:0 6px 0 rgba(120,80,20,.16);
-  --r:28px; --gap:14px;
-  font-family: ui-rounded,"SF Pro Rounded","Nunito","Segoe UI Rounded","Segoe UI",Roboto,system-ui,sans-serif;
+  --ink:#4a2c12; --soft:#9a7046; --sky1:#bfe7ff; --sky2:#eaf7ff; --ground:#fff3cf;
+  --h1:#9fe08a; --h2:#6fcf6a; --h3:#49b655; --accent:#ff6b35; --sun:#ffd34d;
+  --r:30px; --gap:14px; --ease:cubic-bezier(.34,1.56,.64,1);
+  font-family:Kids,"Segoe UI Rounded","Segoe UI",system-ui,sans-serif;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--ink)}
-body{overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation;
-  background:
-   radial-gradient(circle at 10% 8%,#ffe7a3 0 90px,transparent 91px),
-   radial-gradient(circle at 95% 30%,#ffd9e6 0 70px,transparent 71px),
-   radial-gradient(circle at 5% 85%,#d8f3ff 0 80px,transparent 81px), var(--bg);
-  background-attachment:fixed}
+html,body{margin:0;min-height:100%;color:var(--ink);background:var(--sky1)}
+body{overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation;font-weight:700;overflow-x:hidden}
 button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
-.ar{font-family:"Segoe UI",Tahoma,"Geeza Pro",system-ui,sans-serif;direction:rtl}
-#app{max-width:720px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 24px)}
-.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;min-height:64px}
-.round{width:64px;height:64px;border-radius:50%;background:#fff;box-shadow:var(--shadow);font-size:34px;display:grid;place-items:center;flex:none}
-.round:active,.tile:active,.card:active,.opt:active,.big:active{transform:translateY(4px) scale(.98);box-shadow:0 2px 0 rgba(120,80,20,.16)}
-.round.small{width:48px;height:48px;font-size:24px;opacity:.8}
-.brand{display:flex;align-items:center;gap:8px;font-weight:900;font-size:26px;letter-spacing:.3px}
-.brand b:nth-child(2){color:#e8304a}.brand b:nth-child(3){color:#2f6ff0}
-.title{font-weight:900;font-size:28px;text-align:center;flex:1;line-height:1.05}
-.title small{display:block;font-size:15px;font-weight:700;color:var(--soft)}
+.ar{direction:rtl;font-weight:600}
+.pic{display:inline-block;background-repeat:no-repeat;width:1em;height:1em;vertical-align:middle;image-rendering:auto}
+
+/* ---------- world ---------- */
+#world{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:linear-gradient(var(--sky1),var(--sky2) 55%,var(--ground));transition:background 1.2s}
+#world .sun{position:absolute;right:-90px;top:-90px;font-size:200px;animation:spin 90s linear infinite;filter:drop-shadow(0 0 30px rgba(255,210,80,.6))}
+#world .cloud{position:absolute;font-size:120px;opacity:.95;animation:drift var(--t,60s) linear infinite;filter:drop-shadow(0 10px 10px rgba(80,120,180,.12))}
+#world .hills{position:absolute;left:0;right:0;bottom:0;height:34vh;min-height:220px}
+#world .hills svg{position:absolute;inset:0;width:100%;height:100%}
+#world .deco{position:absolute;bottom:0;transform-origin:50% 100%}
+#world .fly{position:absolute;font-size:46px;animation:flutter 7s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes drift{from{transform:translateX(-30vw)}to{transform:translateX(130vw)}}
+@keyframes flutter{0%,100%{transform:translate(0,0) rotate(-8deg)}25%{transform:translate(30px,-22px) rotate(6deg)}50%{transform:translate(70px,-6px) rotate(-4deg)}75%{transform:translate(28px,14px) rotate(8deg)}}
+@keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2.5deg)}}
+@media (prefers-reduced-motion:reduce){#world *{animation:none!important}}
+
+/* ---------- layout ---------- */
+#app{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 10px) 16px calc(env(safe-area-inset-bottom) + 28px);min-height:100vh}
+.screen{animation:scrIn .42s var(--ease) both}
+.screen.out{animation:scrOut .2s ease-in both}
+@keyframes scrIn{from{opacity:0;transform:scale(.94) translateY(16px)}to{opacity:1;transform:none}}
+@keyframes scrOut{to{opacity:0;transform:scale(.96)}}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:72px;margin-bottom:10px}
+.orb{width:68px;height:68px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:40px;
+  background:radial-gradient(circle at 35% 30%,#fff,#f3f6ff 55%,#d9e2f5);box-shadow:0 6px 0 #b9c6e0,0 10px 18px rgba(60,80,140,.18),inset 0 -4px 0 rgba(150,170,210,.25);transition:transform .12s,box-shadow .12s}
+.orb:active,.tile:active,.card:active,.opt:active,.cta:active{transform:translateY(5px) scale(.97);box-shadow:0 1px 0 #b9c6e0,0 3px 8px rgba(60,80,140,.15)}
+.orb.small{width:52px;height:52px;font-size:30px}
+.t3{font-weight:800;letter-spacing:.3px;color:#fff;text-shadow:0 1px 0 #d9b78b,0 2px 0 #c9a476,0 3px 0 #b99262,0 4px 0 #a37f52,0 5px 0 #8f6b42,0 8px 12px rgba(90,50,10,.35)}
+.title{flex:1;text-align:center;line-height:1}
+.title .en{font-size:40px}.title .ar{font-size:17px;color:var(--soft);margin-top:6px}
+.wordmark{display:flex;align-items:center;gap:8px;font-weight:800;font-size:30px;line-height:1}
+.wordmark b:nth-child(2){color:#e8304a;text-shadow:0 2px 0 #b31c33}.wordmark b:nth-child(3){color:#2f6ff0;text-shadow:0 2px 0 #1f4fb3}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap)}
 @media (min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
-.big{display:flex;align-items:center;justify-content:center;gap:14px;width:100%;margin-bottom:var(--gap);padding:18px;border-radius:var(--r);
-  background:linear-gradient(135deg,#ff6b8b,#ffa24c);color:#fff;box-shadow:0 6px 0 #c94d4d;font-weight:900;font-size:30px}
-.big .e{font-size:58px;line-height:1;animation:bob 2.4s ease-in-out infinite}
-.big small{display:block;font-size:16px;opacity:.95}
-.tile{aspect-ratio:1/1;border-radius:var(--r);box-shadow:0 6px 0 rgba(0,0,0,.14);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#fff;
-  text-shadow:0 2px 0 rgba(0,0,0,.15)}
-.tile .e{font-size:clamp(56px,17vw,84px);line-height:1.1;text-shadow:none}
-.tile .n{font-weight:900;font-size:21px}
-.tile .ar{font-size:14px;font-weight:700;opacity:.95}
-.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:10px;border:5px solid var(--b,#ffd46b);position:relative;overflow:hidden}
-.card .w{font-weight:900;font-size:22px;margin-top:4px}
-.card .ar{font-size:14px;color:var(--soft);font-weight:700}
+
+/* ---------- home ---------- */
+.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin:4px 0 12px;min-height:150px}
+.bubble{position:relative;background:#fff;border-radius:26px;padding:14px 18px 12px;box-shadow:0 8px 0 #dfe6f5,0 12px 22px rgba(60,80,140,.14);font-size:22px;line-height:1.15;flex:1;max-width:360px;text-align:left}
+.bubble small{display:block;font-size:16px;color:var(--soft);font-weight:600;margin-top:4px}
+.bubble:after{content:"";position:absolute;right:-12px;bottom:26px;border:14px solid transparent;border-left-color:#fff;border-right:0}
+.chick{position:relative;width:132px;height:132px;flex:none;font-size:124px;display:grid;place-items:center;transform-origin:50% 100%;animation:idle 2.6s ease-in-out infinite;filter:drop-shadow(0 12px 10px rgba(120,80,0,.25))}
+.chick.sm{width:92px;height:92px;font-size:86px}
+.chick .pic{transform-origin:50% 100%}
+.chick.hop .pic{animation:hop .55s var(--ease)}
+.chick.jump .pic{animation:jump .9s cubic-bezier(.3,1.4,.5,1)}
+.chick.no .pic{animation:shake .55s ease}
+.chick.talk .pic{animation:talk .35s ease-in-out infinite}
+@keyframes idle{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(-7px) scale(.98,1.03)}}
+@keyframes hop{0%{transform:scale(1)}30%{transform:translateY(-26px) scale(1.06,.94) rotate(-6deg)}60%{transform:translateY(0) scale(.94,1.06)}100%{transform:scale(1)}}
+@keyframes jump{0%{transform:scale(1)}20%{transform:scale(1.15,.85)}45%{transform:translateY(-70px) scale(.92,1.1) rotate(-12deg)}70%{transform:translateY(0) scale(1.1,.9) rotate(6deg)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-12deg)}40%{transform:rotate(10deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(6deg)}}
+@keyframes talk{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.97) rotate(2deg)}}
+.cta{display:flex;align-items:center;justify-content:center;gap:16px;width:100%;margin-bottom:var(--gap);padding:14px 18px;border-radius:999px;color:#fff;font-size:34px;line-height:1;
+  background:linear-gradient(180deg,#ffb13b,#ff7a1a);box-shadow:0 9px 0 #c74f0b,0 14px 24px rgba(200,90,20,.3),inset 0 3px 0 rgba(255,255,255,.45);text-shadow:0 3px 0 rgba(150,60,0,.45)}
+.cta .pic{font-size:60px;filter:drop-shadow(0 6px 6px rgba(0,0,0,.2));animation:idle 2s ease-in-out infinite}
+.cta small{display:block;font-size:17px;margin-top:6px;opacity:.95}
+.tile{position:relative;aspect-ratio:1/1;border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 10px 14px;color:#fff;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--c) 55%,#fff),var(--c) 60%,color-mix(in srgb,var(--c) 80%,#000 8%));
+  box-shadow:0 9px 0 color-mix(in srgb,var(--c) 70%,#000),0 16px 26px color-mix(in srgb,var(--c) 40%,transparent),inset 0 3px 0 rgba(255,255,255,.5);
+  transition:transform .12s,box-shadow .12s;animation:popIn .6s var(--ease) both;animation-delay:var(--d,0s)}
+.tile .pic{font-size:clamp(84px,24vw,118px);margin-bottom:auto;margin-top:-10px;filter:drop-shadow(0 12px 10px rgba(0,0,0,.28));transition:transform .2s}
+.tile .n{font-size:26px;font-weight:800;text-shadow:0 2px 0 rgba(0,0,0,.25);line-height:1}
+.tile .ar{font-size:15px;opacity:.95;margin-top:4px}
+.tile .shine{position:absolute;left:14px;top:10px;width:40%;height:22%;border-radius:50%;background:linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,0));pointer-events:none}
+@keyframes popIn{from{opacity:0;transform:scale(.3) translateY(40px)}to{opacity:1;transform:none}}
+
+/* ---------- category ---------- */
+.card{position:relative;background:linear-gradient(180deg,#fff,#fdf7ec);border-radius:var(--r);aspect-ratio:1/1.12;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 8px 10px;
+  box-shadow:0 8px 0 var(--b,#ffd46b),0 14px 22px rgba(120,80,20,.14),inset 0 0 0 4px #fff;border:3px solid var(--b,#ffd46b);
+  animation:popIn .55s var(--ease) both;animation-delay:var(--d,0s);transition:transform .12s,box-shadow .12s}
+.card .vis{flex:1;display:grid;place-items:center;width:100%;min-height:0;overflow:visible}
+.card .pic{font-size:clamp(64px,22vw,104px);filter:drop-shadow(0 10px 8px rgba(120,80,20,.25))}
+.card .w{font-size:22px;font-weight:800;margin-top:4px;line-height:1.1}
+.card .ar{font-size:14px;color:var(--soft)}
 .nowords .w,.nowords .ar.m{display:none}
-.vis{flex:1;display:grid;place-items:center;width:100%;min-height:0;overflow:hidden}
-.emo{font-size:clamp(64px,22vw,104px);line-height:1.05}
-.blob{width:72%;aspect-ratio:1/1;border-radius:58% 42% 55% 45%/48% 58% 42% 52%;background:var(--c);box-shadow:inset -8px -10px 0 rgba(0,0,0,.12),inset 8px 8px 0 rgba(255,255,255,.35)}
-.blob.white{border:3px solid #e3dccb}
-.svg{width:78%;height:auto;filter:drop-shadow(0 4px 0 rgba(0,0,0,.12))}
-.num{font-size:clamp(48px,15vw,84px);font-weight:900;line-height:1;color:var(--c)}
-.dots{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;max-width:92px;margin-top:2px}
-.dots i{width:12px;height:12px;border-radius:50%;background:var(--c)}
-.let{font-size:clamp(44px,13vw,72px);font-weight:900;line-height:1;color:var(--c)}
-.let+.emo{font-size:clamp(26px,8vw,44px);line-height:1.15}
-.card.pop{animation:pop .5s ease}
-@keyframes pop{0%{transform:scale(1)}30%{transform:scale(1.08) rotate(-3deg)}60%{transform:scale(.97) rotate(2deg)}100%{transform:scale(1)}}
-@keyframes bob{50%{transform:translateY(-6px) rotate(-6deg)}}
-/* game */
-.ask{display:flex;justify-content:center;margin:0 0 18px}
-.ask button{width:min(110px,14vh);height:min(110px,14vh);border-radius:50%;background:#fff;box-shadow:var(--shadow);font-size:60px;display:grid;place-items:center;animation:ring 2s ease-in-out infinite}
-@keyframes ring{0%,100%{box-shadow:var(--shadow),0 0 0 0 rgba(255,164,76,.5)}50%{box-shadow:var(--shadow),0 0 0 16px rgba(255,164,76,0)}}
-.opts{display:flex;flex-direction:column;align-items:center;gap:18px}
-.opts.n2 .opt{width:min(72vw,33vh,340px)}.opts.n3 .opt{width:min(62vw,23vh,300px)}
-@media (orientation:landscape){.opts{flex-direction:row;justify-content:center}.opts .opt{width:min(30vw,60vh)!important}}
-.opt{aspect-ratio:1/1;background:#fff;border-radius:var(--r);box-shadow:var(--shadow);border:6px solid var(--b,#ffd46b);display:grid;place-items:center;padding:10px}
-.opt .vis{height:100%}.opt .emo{font-size:min(30vw,15vh,150px)}.opt .blob{width:80%}.opt .num{font-size:min(28vw,14vh)}
-.opt.no{animation:wig .45s ease}
-@keyframes wig{20%{transform:translateX(-10px) rotate(-4deg)}40%{transform:translateX(10px) rotate(4deg)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
-.opt.hint{animation:glow 1s ease-in-out infinite}
-@keyframes glow{50%{transform:scale(1.05);box-shadow:0 0 0 10px rgba(255,210,31,.6),var(--shadow)}}
-.opt.yes{animation:win .8s ease;border-color:#26c25a}
-@keyframes win{30%{transform:scale(1.15) rotate(-4deg)}60%{transform:scale(1.05) rotate(3deg)}}
-.stars{background:#fff;border-radius:999px;padding:8px 16px;box-shadow:var(--shadow);font-weight:900;font-size:24px;min-width:90px;text-align:center}
-.fx{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:9}
-.fx span{position:absolute;top:-60px;font-size:40px;animation:fall 1.8s ease-in forwards}
-@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
-.cheer{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%) scale(0);font-size:140px;z-index:10;pointer-events:none;animation:cheer 1.4s ease forwards}
-@keyframes cheer{25%{transform:translate(-50%,-50%) scale(1.15)}40%{transform:translate(-50%,-50%) scale(1)}85%{opacity:1}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
-/* parent sheet */
-.sheet{position:fixed;inset:0;background:rgba(40,25,10,.45);display:flex;align-items:flex-end;justify-content:center;z-index:20}
-.sheet>div{background:#fff;width:100%;max-width:560px;border-radius:28px 28px 0 0;padding:22px 20px calc(env(safe-area-inset-bottom) + 22px);max-height:88vh;overflow:auto;-webkit-user-select:text;user-select:text}
-.sheet h2{margin:0 0 10px;font-size:24px}
-.sheet p,.sheet li{font-size:17px;line-height:1.7;margin:6px 0}
-.sheet ol{padding-inline-start:22px;margin:4px 0 10px}
-.sheet h3{margin:16px 0 4px;font-size:18px}
+.card.bump .vis{animation:bump .6s var(--ease)}
+@keyframes bump{0%{transform:scale(1)}25%{transform:scale(1.18,.86) translateY(6px)}50%{transform:scale(.95,1.08) translateY(-18px)}75%{transform:scale(1.04,.98) translateY(0)}100%{transform:scale(1)}}
+.say{position:absolute;left:50%;top:-10px;transform:translate(-50%,0);background:#fff;color:var(--accent);font-size:30px;font-weight:800;padding:8px 18px 6px;border-radius:999px;
+  box-shadow:0 6px 0 #ffd0b8,0 10px 16px rgba(120,80,20,.18);pointer-events:none;white-space:nowrap;animation:sayUp 1.4s ease forwards;z-index:3}
+@keyframes sayUp{0%{opacity:0;transform:translate(-50%,10px) scale(.6)}20%{opacity:1;transform:translate(-50%,-14px) scale(1.08)}35%{transform:translate(-50%,-14px) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-40px)}}
+.spark{position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;background:var(--sc,#ffd34d);pointer-events:none;animation:spark .7s ease-out forwards;z-index:2}
+@keyframes spark{to{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
+/* shapes / numbers / letters */
+.svg{width:76%;height:auto;filter:drop-shadow(0 10px 8px rgba(120,80,20,.22))}
+.num{font-size:clamp(56px,16vw,86px);font-weight:800;line-height:1;color:var(--c);text-shadow:0 2px 0 color-mix(in srgb,var(--c),#000 25%),0 4px 0 color-mix(in srgb,var(--c),#000 35%),0 6px 0 color-mix(in srgb,var(--c),#000 45%),0 10px 12px rgba(0,0,0,.25)}
+.dots{display:flex;flex-wrap:wrap;justify-content:center;gap:1px;max-width:112px;margin-top:2px}
+.dots .pic{font-size:19px}
+.let{font-size:clamp(44px,12.5vw,66px);font-weight:800;line-height:1;color:var(--c);text-shadow:0 2px 0 color-mix(in srgb,var(--c),#000 25%),0 4px 0 color-mix(in srgb,var(--c),#000 40%),0 8px 10px rgba(0,0,0,.22)}
+.letrow{display:flex;align-items:center;justify-content:center;gap:8px}
+.letrow .pic{font-size:clamp(40px,11vw,58px)}
+.fam{position:relative;width:1em;height:1em;font-size:inherit}
+.fam .pic{position:absolute;font-size:.56em}
+.fam .pic:nth-child(1){left:0;top:.05em}.fam .pic:nth-child(2){right:0;top:.05em}.fam .pic:nth-child(3){left:.12em;bottom:0}.fam .pic:nth-child(4){right:.12em;bottom:0}
+
+/* ---------- game ---------- */
+.gtop{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 0 10px}
+.ask{position:relative;background:#fff;border-radius:28px;padding:10px 20px;box-shadow:0 8px 0 #dfe6f5,0 12px 22px rgba(60,80,140,.14);display:flex;align-items:center;gap:12px;font-size:26px;min-height:76px}
+.ask:after{content:"";position:absolute;left:-12px;bottom:22px;border:14px solid transparent;border-right-color:#fff;border-left:0}
+.ask .pic{font-size:46px}
+.wave{display:flex;gap:4px;align-items:center;height:34px}
+.wave i{width:6px;border-radius:3px;background:var(--accent);height:10px;animation:wave 1s ease-in-out infinite;animation-delay:calc(var(--i)*.12s)}
+.ask.quiet .wave i{animation:none;height:8px;background:#e5d9c8}
+@keyframes wave{0%,100%{height:10px}50%{height:32px}}
+.stars{display:flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:6px 16px 6px 10px;box-shadow:0 6px 0 #dfe6f5,0 10px 18px rgba(60,80,140,.14);font-size:28px;font-weight:800}
+.stars .pic{font-size:40px}
+.stars.bump{animation:bump .5s var(--ease)}
+.prog{display:flex;gap:5px;margin-left:4px}
+.prog i{width:12px;height:12px;border-radius:50%;background:#e8dcc8;transition:background .3s,transform .3s}
+.prog i.on{background:#ffb703;transform:scale(1.25);box-shadow:0 0 0 3px rgba(255,183,3,.3)}
+.opts{display:flex;flex-direction:column;align-items:center;gap:18px;padding-top:6px}
+.opts.n2 .opt{width:min(74vw,34vh,360px)}.opts.n3 .opt{width:min(66vw,24vh,320px)}
+@media (orientation:landscape){.opts{flex-direction:row;justify-content:center}.opts .opt{width:min(30vw,62vh)!important}}
+.opt{position:relative;aspect-ratio:1/1;background:linear-gradient(180deg,#fff,#fdf7ec);border-radius:36px;display:grid;place-items:center;padding:10px;border:4px solid var(--b,#ffd46b);
+  box-shadow:0 10px 0 var(--b,#ffd46b),0 18px 28px rgba(120,80,20,.16);animation:popIn .5s var(--ease) both;animation-delay:var(--d,0s);transition:transform .12s,box-shadow .12s}
+.opt .pic{font-size:min(34vw,16vh,170px);filter:drop-shadow(0 14px 10px rgba(120,80,20,.25))}
+.opt .num{font-size:min(30vw,15vh,150px)}.opt .let{font-size:min(34vw,16vh,160px)}
+.opt .svg{width:82%}
+.opt.no{animation:wig .5s ease}
+@keyframes wig{20%{transform:translateX(-12px) rotate(-4deg)}40%{transform:translateX(12px) rotate(4deg)}60%{transform:translateX(-7px)}80%{transform:translateX(7px)}}
+.opt.hint{animation:hint 1s ease-in-out infinite}
+@keyframes hint{50%{transform:scale(1.06) translateY(-8px);box-shadow:0 18px 0 var(--b),0 0 0 12px rgba(255,210,31,.45),0 26px 30px rgba(120,80,20,.2)}}
+.opt.yes{border-color:#2dc653;box-shadow:0 10px 0 #2dc653,0 0 0 10px rgba(45,198,83,.25),0 18px 28px rgba(45,198,83,.3);animation:win .9s var(--ease)}
+.opt.yes .pic,.opt.yes .num,.opt.yes .let,.opt.yes .svg{animation:bump .7s var(--ease)}
+@keyframes win{30%{transform:scale(1.12) rotate(-3deg)}60%{transform:scale(1.04) rotate(2deg)}}
+.opts.leave .opt{animation:leave .25s ease-in forwards}
+@keyframes leave{to{opacity:0;transform:translateY(40px) scale(.9)}}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9}
+.flystar{position:fixed;z-index:10;font-size:54px;pointer-events:none;filter:drop-shadow(0 6px 6px rgba(0,0,0,.25))}
+.cheer{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%) scale(0);font-size:170px;z-index:10;pointer-events:none;animation:cheer 1.5s ease forwards;filter:drop-shadow(0 16px 14px rgba(0,0,0,.25))}
+@keyframes cheer{25%{transform:translate(-50%,-50%) scale(1.15) rotate(-6deg)}40%{transform:translate(-50%,-50%) scale(1) rotate(0)}85%{opacity:1}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+.balloon{position:fixed;bottom:-160px;font-size:120px;z-index:10;pointer-events:none;animation:rise 3.2s ease-in forwards;filter:drop-shadow(0 10px 10px rgba(0,0,0,.2))}
+@keyframes rise{to{transform:translateY(-130vh) rotate(var(--rot,8deg))}}
+
+/* ---------- parent sheet ---------- */
+.sheet{position:fixed;inset:0;background:rgba(40,25,10,.45);display:flex;align-items:flex-end;justify-content:center;z-index:20;animation:fade .25s ease}
+@keyframes fade{from{opacity:0}}
+.sheet>div{background:#fff;width:100%;max-width:560px;border-radius:30px 30px 0 0;padding:22px 20px calc(env(safe-area-inset-bottom) + 22px);max-height:88vh;overflow:auto;-webkit-user-select:text;user-select:text;animation:up .4s var(--ease)}
+@keyframes up{from{transform:translateY(60px);opacity:0}}
+.sheet h2{margin:0 0 10px;font-size:26px}
+.sheet p,.sheet li{font-size:17px;line-height:1.7;margin:6px 0;font-weight:600}
+.sheet h3{margin:16px 0 4px;font-size:19px}
 .row{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
-.btn{background:#ffb84d;color:#3a2a1a;font-weight:800;border-radius:16px;padding:12px 18px;font-size:17px;box-shadow:0 4px 0 #d18a2a}
+.btn{background:linear-gradient(180deg,#ffc93c,#ffa726);color:#4a2c12;font-weight:800;border-radius:16px;padding:12px 18px;font-size:17px;box-shadow:0 4px 0 #d18a2a}
 .btn.alt{background:#eef2f7;box-shadow:0 4px 0 #c9d2dd}
 .ok{color:#1c8a43;font-weight:800}
 </style>
 </head>
 <body>
+<div id="world"></div>
 <div id="app"></div>
+<canvas id="fx"></canvas>
 <script>
-const DATA = {"cats":[{"id":"animals","en":"Animals","ar":"الحيوانات","tile":"🦁","bg":"#ffb84d","type":"emoji","items":[{"id":"cat","en":"Cat","ar":"قطة","v":"🐱"},{"id":"dog","en":"Dog","ar":"كلب","v":"🐶"},{"id":"cow","en":"Cow","ar":"بقرة","v":"🐮"},{"id":"sheep","en":"Sheep","ar":"خروف","v":"🐑"},{"id":"duck","en":"Duck","ar":"بطة","v":"🦆"},{"id":"chicken","en":"Chicken","ar":"دجاجة","v":"🐔"},{"id":"horse","en":"Horse","ar":"حصان","v":"🐴"},{"id":"lion","en":"Lion","ar":"أسد","v":"🦁"},{"id":"frog","en":"Frog","ar":"ضفدع","v":"🐸"},{"id":"bird","en":"Bird","ar":"عصفور","v":"🐦"},{"id":"monkey","en":"Monkey","ar":"قرد","v":"🐵"},{"id":"owl","en":"Owl","ar":"بومة","v":"🦉"},{"id":"camel","en":"Camel","ar":"جمل","v":"🐪"},{"id":"elephant","en":"Elephant","ar":"فيل","v":"🐘"},{"id":"fish","en":"Fish","ar":"سمكة","v":"🐟"}]},{"id":"colors","en":"Colors","ar":"الألوان","tile":"🎨","bg":"#ff7aa8","type":"color","items":[{"id":"red","en":"Red","ar":"أحمر","v":"#ef3b3b"},{"id":"blue","en":"Blue","ar":"أزرق","v":"#2f7bf5"},{"id":"yellow","en":"Yellow","ar":"أصفر","v":"#ffd21f"},{"id":"green","en":"Green","ar":"أخضر","v":"#26c25a"},{"id":"orange","en":"Orange","ar":"برتقالي","v":"#ff8a1f"},{"id":"purple","en":"Purple","ar":"بنفسجي","v":"#9b4dff"},{"id":"pink","en":"Pink","ar":"وردي","v":"#ff7ac1"},{"id":"brown","en":"Brown","ar":"بني","v":"#9a5a2a"},{"id":"black","en":"Black","ar":"أسود","v":"#1d1d24"},{"id":"white","en":"White","ar":"أبيض","v":"#ffffff"}]},{"id":"numbers","en":"Numbers","ar":"الأرقام","tile":"🔢","bg":"#6cc4ff","type":"number","items":[{"id":"1","en":"One","ar":"واحد","v":1},{"id":"2","en":"Two","ar":"اثنين","v":2},{"id":"3","en":"Three","ar":"ثلاثة","v":3},{"id":"4","en":"Four","ar":"أربعة","v":4},{"id":"5","en":"Five","ar":"خمسة","v":5},{"id":"6","en":"Six","ar":"ستة","v":6},{"id":"7","en":"Seven","ar":"سبعة","v":7},{"id":"8","en":"Eight","ar":"ثمانية","v":8},{"id":"9","en":"Nine","ar":"تسعة","v":9},{"id":"10","en":"Ten","ar":"عشرة","v":10}]},{"id":"shapes","en":"Shapes","ar":"الأشكال","tile":"⭐","bg":"#b58cff","type":"shape","items":[{"id":"circle","en":"Circle","ar":"دائرة","v":"#ff5a5f"},{"id":"square","en":"Square","ar":"مربع","v":"#2f7bf5"},{"id":"triangle","en":"Triangle","ar":"مثلث","v":"#26c25a"},{"id":"star","en":"Star","ar":"نجمة","v":"#ffc21f"},{"id":"heart","en":"Heart","ar":"قلب","v":"#ff5fa2"},{"id":"rectangle","en":"Rectangle","ar":"مستطيل","v":"#9b4dff"},{"id":"oval","en":"Oval","ar":"بيضاوي","v":"#ff8a1f"},{"id":"diamond","en":"Diamond","ar":"معيّن","v":"#14b8c4"}]},{"id":"fruits","en":"Fruits","ar":"الفواكه","tile":"🍓","bg":"#7fdc6a","type":"emoji","items":[{"id":"apple","en":"Apple","ar":"تفاحة","v":"🍎"},{"id":"banana","en":"Banana","ar":"موزة","v":"🍌"},{"id":"orange","en":"Orange","ar":"برتقالة","v":"🍊"},{"id":"grapes","en":"Grapes","ar":"عنب","v":"🍇"},{"id":"strawberry","en":"Strawberry","ar":"فراولة","v":"🍓"},{"id":"watermelon","en":"Watermelon","ar":"بطيخ","v":"🍉"},{"id":"mango","en":"Mango","ar":"مانجو","v":"🥭"},{"id":"pineapple","en":"Pineapple","ar":"أناناس","v":"🍍"},{"id":"cherry","en":"Cherry","ar":"كرز","v":"🍒"},{"id":"lemon","en":"Lemon","ar":"ليمون","v":"🍋"}]},{"id":"body","en":"My Body","ar":"جسمي","tile":"👃","bg":"#ffcf3f","type":"emoji","items":[{"id":"eyes","en":"Eyes","ar":"عيون","v":"👀"},{"id":"ear","en":"Ear","ar":"أذن","v":"👂"},{"id":"nose","en":"Nose","ar":"أنف","v":"👃"},{"id":"mouth","en":"Mouth","ar":"فم","v":"👄"},{"id":"teeth","en":"Teeth","ar":"أسنان","v":"🦷"},{"id":"tongue","en":"Tongue","ar":"لسان","v":"👅"},{"id":"hand","en":"Hand","ar":"يد","v":"✋"},{"id":"arm","en":"Arm","ar":"ذراع","v":"💪"},{"id":"leg","en":"Leg","ar":"رجل","v":"🦵"},{"id":"foot","en":"Foot","ar":"قدم","v":"🦶"}]},{"id":"family","en":"Family","ar":"عائلتي","tile":"👨‍👩‍👧‍👦","bg":"#ff9a7a","type":"emoji","items":[{"id":"mommy","en":"Mommy","ar":"ماما","v":"👩"},{"id":"daddy","en":"Daddy","ar":"بابا","v":"👨"},{"id":"brother","en":"Brother","ar":"أخ","v":"👦"},{"id":"sister","en":"Sister","ar":"أخت","v":"👧"},{"id":"baby","en":"Baby","ar":"بيبي","v":"👶"},{"id":"grandma","en":"Grandma","ar":"جدة","v":"👵"},{"id":"grandpa","en":"Grandpa","ar":"جد","v":"👴"},{"id":"family","en":"Family","ar":"عائلة","v":"👨‍👩‍👧‍👦"}]},{"id":"abc","en":"ABC","ar":"الحروف","tile":"🔤","bg":"#4fd6c4","type":"letter","items":[{"id":"a","en":"Apple","ar":"تفاحة","v":["A","🍎"]},{"id":"b","en":"Ball","ar":"كرة","v":["B","⚽"]},{"id":"c","en":"Cat","ar":"قطة","v":["C","🐱"]},{"id":"d","en":"Dog","ar":"كلب","v":["D","🐶"]},{"id":"e","en":"Egg","ar":"بيضة","v":["E","🥚"]},{"id":"f","en":"Fish","ar":"سمكة","v":["F","🐟"]},{"id":"g","en":"Grapes","ar":"عنب","v":["G","🍇"]},{"id":"h","en":"Hat","ar":"قبعة","v":["H","🎩"]},{"id":"i","en":"Ice cream","ar":"آيس كريم","v":["I","🍦"]},{"id":"j","en":"Juice","ar":"عصير","v":["J","🧃"]},{"id":"k","en":"Kite","ar":"طائرة ورقية","v":["K","🪁"]},{"id":"l","en":"Lion","ar":"أسد","v":["L","🦁"]},{"id":"m","en":"Moon","ar":"قمر","v":["M","🌙"]},{"id":"n","en":"Nose","ar":"أنف","v":["N","👃"]},{"id":"o","en":"Orange","ar":"برتقالة","v":["O","🍊"]},{"id":"p","en":"Penguin","ar":"بطريق","v":["P","🐧"]},{"id":"q","en":"Queen","ar":"ملكة","v":["Q","👸"]},{"id":"r","en":"Rainbow","ar":"قوس قزح","v":["R","🌈"]},{"id":"s","en":"Sun","ar":"شمس","v":["S","☀️"]},{"id":"t","en":"Tree","ar":"شجرة","v":["T","🌳"]},{"id":"u","en":"Umbrella","ar":"مظلة","v":["U","☂️"]},{"id":"v","en":"Van","ar":"فان","v":["V","🚐"]},{"id":"w","en":"Whale","ar":"حوت","v":["W","🐳"]},{"id":"x","en":"Box","ar":"صندوق","v":["X","📦"]},{"id":"y","en":"Yo-yo","ar":"يويو","v":["Y","🪀"]},{"id":"z","en":"Zebra","ar":"حمار وحشي","v":["Z","🦓"]}]}],"snd":{"misc":{"hello":[0.15,2.821],"play":[3.271,0.879],"p1":[4.45,0.783],"p2":[5.534,2.317],"p3":[8.151,0.782],"p4":[9.233,0.62],"p5":[10.152,1.01],"p6":[11.462,0.682],"again":[12.444,2.411],"c:animals":[15.156,0.778],"c:colors":[16.234,0.682],"c:numbers":[17.216,0.734],"c:shapes":[18.25,0.645],"c:fruits":[19.196,0.629],"c:body":[20.125,0.761],"c:family":[21.186,0.899],"c:abc":[22.385,1.637]},"animals":{"w:cat":[0.15,3.613],"q:cat":[4.063,1.079],"w:dog":[5.442,3.463],"q:dog":[9.205,0.968],"w:cow":[10.473,2.588],"q:cow":[13.361,1.004],"w:sheep":[14.665,3.272],"q:sheep":[18.236,0.971],"w:duck":[19.507,3.576],"q:duck":[23.383,0.994],"w:chicken":[24.677,3.737],"q:chicken":[28.714,1.094],"w:horse":[30.108,2.718],"q:horse":[33.126,1.118],"w:lion":[34.544,2.983],"q:lion":[37.827,1.048],"w:frog":[39.175,3.797],"q:frog":[43.272,1.043],"w:bird":[44.615,3.309],"q:bird":[48.224,0.914],"w:monkey":[49.438,3.983],"q:monkey":[53.721,1.095],"w:owl":[55.116,3.185],"q:owl":[58.601,0.916],"w:camel":[59.816,3.3],"q:camel":[63.417,1.051],"w:elephant":[64.768,3.328],"q:elephant":[68.396,1.244],"w:fish":[69.94,2.914],"q:fish":[73.154,1.105]},"colors":{"w:red":[0.15,0.523],"q:red":[0.973,0.871],"w:blue":[2.144,0.535],"q:blue":[2.979,0.927],"w:yellow":[4.206,0.623],"q:yellow":[5.13,0.941],"w:green":[6.37,0.568],"q:green":[7.238,0.975],"w:orange":[8.514,0.655],"q:orange":[9.468,1.017],"w:purple":[10.786,0.554],"q:purple":[11.64,0.939],"w:pink":[12.879,0.519],"q:pink":[13.698,0.937],"w:brown":[14.935,0.549],"q:brown":[15.784,0.958],"w:black":[17.042,0.591],"q:black":[17.932,0.965],"w:white":[19.197,0.587],"q:white":[20.084,0.97]},"numbers":{"w:1":[0.15,0.521],"q:1":[0.971,1.114],"w:2":[2.385,0.517],"q:2":[3.202,1.178],"w:3":[4.68,0.5],"q:3":[5.479,1.188],"w:4":[6.968,0.55],"q:4":[7.817,1.227],"w:5":[9.345,0.566],"q:5":[10.211,1.393],"w:6":[11.904,0.655],"q:6":[12.859,1.373],"w:7":[14.532,0.655],"q:7":[15.488,1.252],"w:8":[17.039,0.516],"q:8":[17.855,1.2],"w:9":[19.355,0.575],"q:9":[20.23,1.21],"w:10":[21.74,0.529],"q:10":[22.57,1.224]},"shapes":{"w:circle":[0.15,0.66],"q:circle":[1.11,1.072],"w:square":[2.482,0.674],"q:square":[3.455,1.12],"w:triangle":[4.875,0.79],"q:triangle":[5.965,1.209],"w:star":[7.474,0.612],"q:star":[8.387,1.073],"w:heart":[9.759,0.536],"q:heart":[10.595,1.013],"w:rectangle":[11.909,0.837],"q:rectangle":[13.046,1.243],"w:oval":[14.589,0.532],"q:oval":[15.421,1.003],"w:diamond":[16.724,0.588],"q:diamond":[17.613,1.114]},"fruits":{"w:apple":[0.15,2.108],"q:apple":[2.558,0.998],"w:banana":[3.856,2.232],"q:banana":[6.387,1.108],"w:orange":[7.796,2.204],"q:orange":[10.3,1.139],"w:grapes":[11.739,2.212],"q:grapes":[14.251,1.08],"w:strawberry":[15.631,2.441],"q:strawberry":[18.372,1.229],"w:watermelon":[19.901,2.436],"q:watermelon":[22.637,1.284],"w:mango":[24.22,2.22],"q:mango":[26.74,1.083],"w:pineapple":[28.123,2.346],"q:pineapple":[30.77,1.189],"w:cherry":[32.259,2.14],"q:cherry":[34.698,1.062],"w:lemon":[36.061,2.169],"q:lemon":[38.53,1.032]},"body":{"w:eyes":[0.15,2.716],"q:eyes":[3.166,1.146],"w:ear":[4.612,2.429],"q:ear":[7.34,0.958],"w:nose":[8.599,2.707],"q:nose":[11.606,1.114],"w:mouth":[13.02,2.57],"q:mouth":[15.89,1.04],"w:teeth":[17.23,2.613],"q:teeth":[20.143,1.012],"w:tongue":[21.455,2.649],"q:tongue":[24.403,1.007],"w:hand":[25.71,2.462],"q:hand":[28.472,0.976],"w:arm":[29.748,2.354],"q:arm":[32.402,0.931],"w:leg":[33.632,2.49],"q:leg":[36.422,1.012],"w:foot":[37.734,2.703],"q:foot":[40.737,1.011]},"family":{"w:mommy":[0.15,3.113],"q:mommy":[3.563,0.948],"w:daddy":[4.811,3.113],"q:daddy":[8.224,0.916],"w:brother":[9.44,2.564],"q:brother":[12.304,0.941],"w:sister":[13.545,2.639],"q:sister":[16.484,0.983],"w:baby":[17.766,2.523],"q:baby":[20.59,1.018],"w:grandma":[21.908,3.186],"q:grandma":[25.394,0.988],"w:grandpa":[26.681,3.209],"q:grandpa":[30.191,1.013],"w:family":[31.504,3.02],"q:family":[34.824,1.152]},"abc":{"w:a":[0.15,1.2],"q:a":[1.65,1.176],"w:b":[3.127,1.116],"q:b":[4.543,1.164],"w:c":[6.007,1.36],"q:c":[7.667,1.282],"w:d":[9.248,1.16],"q:d":[10.709,1.23],"w:e":[12.239,1.149],"q:e":[13.687,1.155],"w:f":[15.143,1.336],"q:f":[16.778,1.301],"w:g":[18.38,1.335],"q:g":[20.015,1.289],"w:h":[21.604,1.322],"q:h":[23.225,1.35],"w:i":[24.875,1.324],"q:i":[26.499,1.185],"w:j":[27.983,1.39],"q:j":[29.673,1.306],"w:k":[31.279,1.459],"q:k":[33.038,1.32],"w:l":[34.658,1.366],"q:l":[36.324,1.21],"w:m":[37.834,1.115],"q:m":[39.249,1.2],"w:n":[40.749,1.458],"q:n":[42.507,1.216],"w:o":[44.023,1.394],"q:o":[45.717,1.211],"w:p":[47.228,1.3],"q:p":[48.829,1.228],"w:q":[50.357,1.379],"q:q":[52.035,1.306],"w:r":[53.641,1.242],"q:r":[55.183,1.233],"w:s":[56.716,1.185],"q:s":[58.201,1.313],"w:t":[59.814,1.317],"q:t":[61.432,1.275],"w:u":[63.006,1.297],"q:u":[64.603,1.184],"w:v":[66.087,1.12],"q:v":[67.507,1.207],"w:w":[69.014,1.378],"q:w":[70.693,1.465],"w:x":[72.457,1.398],"q:x":[74.155,1.389],"w:y":[75.845,1.442],"q:y":[77.587,1.279],"w:z":[79.165,1.222],"q:z":[80.688,1.261]}}};
+const DATA = {"cats":[{"id":"animals","en":"Animals","ar":"الحيوانات","tile":"lion","bg":"#ffb84d","hue":"#f59e0b","type":"emoji","items":[{"id":"cat","en":"Cat","ar":"قطة","v":"🐱"},{"id":"dog","en":"Dog","ar":"كلب","v":"🐶"},{"id":"cow","en":"Cow","ar":"بقرة","v":"🐮"},{"id":"sheep","en":"Sheep","ar":"خروف","v":"🐑"},{"id":"duck","en":"Duck","ar":"بطة","v":"🦆"},{"id":"chicken","en":"Chicken","ar":"دجاجة","v":"🐔"},{"id":"horse","en":"Horse","ar":"حصان","v":"🐴"},{"id":"lion","en":"Lion","ar":"أسد","v":"🦁"},{"id":"frog","en":"Frog","ar":"ضفدع","v":"🐸"},{"id":"bird","en":"Bird","ar":"عصفور","v":"🐦"},{"id":"monkey","en":"Monkey","ar":"قرد","v":"🐵"},{"id":"owl","en":"Owl","ar":"بومة","v":"🦉"},{"id":"camel","en":"Camel","ar":"جمل","v":"🐪"},{"id":"elephant","en":"Elephant","ar":"فيل","v":"🐘"},{"id":"fish","en":"Fish","ar":"سمكة","v":"🐟"}]},{"id":"colors","en":"Colors","ar":"الألوان","tile":"palette","bg":"#ff7aa8","hue":"#ec4899","type":"color","items":[{"id":"red","en":"Red","ar":"أحمر","v":"#ef3b3b","img":"red"},{"id":"blue","en":"Blue","ar":"أزرق","v":"#2f7bf5","img":"blue"},{"id":"yellow","en":"Yellow","ar":"أصفر","v":"#ffd21f","img":"yellow"},{"id":"green","en":"Green","ar":"أخضر","v":"#26c25a","img":"green"},{"id":"orange","en":"Orange","ar":"برتقالي","v":"#ff8a1f","img":"orange_c"},{"id":"purple","en":"Purple","ar":"بنفسجي","v":"#9b4dff","img":"purple"},{"id":"pink","en":"Pink","ar":"وردي","v":"#ff7ac1","img":"pink"},{"id":"brown","en":"Brown","ar":"بني","v":"#9a5a2a","img":"brown"},{"id":"black","en":"Black","ar":"أسود","v":"#1d1d24","img":"black"},{"id":"white","en":"White","ar":"أبيض","v":"#ffffff","img":"white"}]},{"id":"numbers","en":"Numbers","ar":"الأرقام","tile":"numbers","bg":"#6cc4ff","hue":"#3b82f6","type":"number","items":[{"id":"1","en":"One","ar":"واحد","v":1},{"id":"2","en":"Two","ar":"اثنين","v":2},{"id":"3","en":"Three","ar":"ثلاثة","v":3},{"id":"4","en":"Four","ar":"أربعة","v":4},{"id":"5","en":"Five","ar":"خمسة","v":5},{"id":"6","en":"Six","ar":"ستة","v":6},{"id":"7","en":"Seven","ar":"سبعة","v":7},{"id":"8","en":"Eight","ar":"ثمانية","v":8},{"id":"9","en":"Nine","ar":"تسعة","v":9},{"id":"10","en":"Ten","ar":"عشرة","v":10}]},{"id":"shapes","en":"Shapes","ar":"الأشكال","tile":"shapes","bg":"#b58cff","hue":"#8b5cf6","type":"shape","items":[{"id":"circle","en":"Circle","ar":"دائرة","v":"#ff5a5f"},{"id":"square","en":"Square","ar":"مربع","v":"#2f7bf5"},{"id":"triangle","en":"Triangle","ar":"مثلث","v":"#26c25a"},{"id":"star","en":"Star","ar":"نجمة","v":"#ffc21f"},{"id":"heart","en":"Heart","ar":"قلب","v":"#ff5fa2"},{"id":"rectangle","en":"Rectangle","ar":"مستطيل","v":"#9b4dff"},{"id":"oval","en":"Oval","ar":"بيضاوي","v":"#ff8a1f"},{"id":"diamond","en":"Diamond","ar":"معيّن","v":"#14b8c4"}]},{"id":"fruits","en":"Fruits","ar":"الفواكه","tile":"strawberry","bg":"#7fdc6a","hue":"#22c55e","type":"emoji","items":[{"id":"apple","en":"Apple","ar":"تفاحة","v":"🍎"},{"id":"banana","en":"Banana","ar":"موزة","v":"🍌"},{"id":"orange","en":"Orange","ar":"برتقالة","v":"🍊"},{"id":"grapes","en":"Grapes","ar":"عنب","v":"🍇"},{"id":"strawberry","en":"Strawberry","ar":"فراولة","v":"🍓"},{"id":"watermelon","en":"Watermelon","ar":"بطيخ","v":"🍉"},{"id":"mango","en":"Mango","ar":"مانجو","v":"🥭"},{"id":"pineapple","en":"Pineapple","ar":"أناناس","v":"🍍"},{"id":"cherry","en":"Cherry","ar":"كرز","v":"🍒"},{"id":"lemon","en":"Lemon","ar":"ليمون","v":"🍋"}]},{"id":"body","en":"My Body","ar":"جسمي","tile":"hand","bg":"#ffcf3f","hue":"#eab308","type":"emoji","items":[{"id":"eyes","en":"Eyes","ar":"عيون","v":"👀"},{"id":"ear","en":"Ear","ar":"أذن","v":"👂"},{"id":"nose","en":"Nose","ar":"أنف","v":"👃"},{"id":"mouth","en":"Mouth","ar":"فم","v":"👄"},{"id":"teeth","en":"Teeth","ar":"أسنان","v":"🦷"},{"id":"tongue","en":"Tongue","ar":"لسان","v":"👅"},{"id":"hand","en":"Hand","ar":"يد","v":"✋"},{"id":"arm","en":"Arm","ar":"ذراع","v":"💪"},{"id":"leg","en":"Leg","ar":"رجل","v":"🦵"},{"id":"foot","en":"Foot","ar":"قدم","v":"🦶"}]},{"id":"family","en":"Family","ar":"عائلتي","tile":"hug","bg":"#ff9a7a","hue":"#f97316","type":"emoji","items":[{"id":"mommy","en":"Mommy","ar":"ماما","v":"👩"},{"id":"daddy","en":"Daddy","ar":"بابا","v":"👨"},{"id":"brother","en":"Brother","ar":"أخ","v":"👦"},{"id":"sister","en":"Sister","ar":"أخت","v":"👧"},{"id":"baby","en":"Baby","ar":"بيبي","v":"👶"},{"id":"grandma","en":"Grandma","ar":"جدة","v":"👵"},{"id":"grandpa","en":"Grandpa","ar":"جد","v":"👴"},{"id":"family","en":"Family","ar":"عائلة","v":"👨‍👩‍👧‍👦"}]},{"id":"abc","en":"ABC","ar":"الحروف","tile":"letters","bg":"#4fd6c4","hue":"#14b8a6","type":"letter","items":[{"id":"a","en":"Apple","ar":"تفاحة","v":["A","🍎"],"img":"apple"},{"id":"b","en":"Ball","ar":"كرة","v":["B","⚽"],"img":"ball"},{"id":"c","en":"Cat","ar":"قطة","v":["C","🐱"],"img":"cat"},{"id":"d","en":"Dog","ar":"كلب","v":["D","🐶"],"img":"dog"},{"id":"e","en":"Egg","ar":"بيضة","v":["E","🥚"],"img":"egg"},{"id":"f","en":"Fish","ar":"سمكة","v":["F","🐟"],"img":"fish"},{"id":"g","en":"Grapes","ar":"عنب","v":["G","🍇"],"img":"grapes"},{"id":"h","en":"Hat","ar":"قبعة","v":["H","🎩"],"img":"hat"},{"id":"i","en":"Ice cream","ar":"آيس كريم","v":["I","🍦"],"img":"icecream"},{"id":"j","en":"Juice","ar":"عصير","v":["J","🧃"],"img":"juice"},{"id":"k","en":"Kite","ar":"طائرة ورقية","v":["K","🪁"],"img":"kite"},{"id":"l","en":"Lion","ar":"أسد","v":["L","🦁"],"img":"lion"},{"id":"m","en":"Moon","ar":"قمر","v":["M","🌙"],"img":"moon"},{"id":"n","en":"Nose","ar":"أنف","v":["N","👃"],"img":"nose"},{"id":"o","en":"Orange","ar":"برتقالة","v":["O","🍊"],"img":"orange"},{"id":"p","en":"Penguin","ar":"بطريق","v":["P","🐧"],"img":"penguin"},{"id":"q","en":"Queen","ar":"ملكة","v":["Q","👸"],"img":"queen"},{"id":"r","en":"Rainbow","ar":"قوس قزح","v":["R","🌈"],"img":"rainbow"},{"id":"s","en":"Sun","ar":"شمس","v":["S","☀️"],"img":"sun"},{"id":"t","en":"Tree","ar":"شجرة","v":["T","🌳"],"img":"tree"},{"id":"u","en":"Umbrella","ar":"مظلة","v":["U","☂️"],"img":"umbrella"},{"id":"v","en":"Van","ar":"فان","v":["V","🚐"],"img":"van"},{"id":"w","en":"Whale","ar":"حوت","v":["W","🐳"],"img":"whale"},{"id":"x","en":"Box","ar":"صندوق","v":["X","📦"],"img":"box"},{"id":"y","en":"Yo-yo","ar":"يويو","v":["Y","🪀"],"img":"yoyo"},{"id":"z","en":"Zebra","ar":"حمار وحشي","v":["Z","🦓"],"img":"zebra"}]}],"snd":{"misc":{"hello":[0.15,2.821],"play":[3.271,0.879],"p1":[4.45,0.783],"p2":[5.534,2.317],"p3":[8.151,0.782],"p4":[9.233,0.62],"p5":[10.152,1.01],"p6":[11.462,0.682],"again":[12.444,2.411],"five":[15.156,4.718],"listen":[20.174,0.674],"c:animals":[21.148,0.778],"c:colors":[22.227,0.682],"c:numbers":[23.209,0.734],"c:shapes":[24.243,0.645],"c:fruits":[25.188,0.629],"c:body":[26.117,0.761],"c:family":[27.179,0.899],"c:abc":[28.378,1.637],"fx:pop":[30.315,0.27],"fx:whoosh":[30.885,0.55],"fx:ding":[31.735,0.63],"fx:twinkle":[32.665,0.63],"fx:win":[33.595,1.03],"fx:nope":[34.925,0.55],"fx:fanfare":[35.775,1.73]},"animals":{"w:cat":[0.15,3.613],"q:cat":[4.063,1.079],"w:dog":[5.442,3.463],"q:dog":[9.205,0.968],"w:cow":[10.473,2.588],"q:cow":[13.361,1.004],"w:sheep":[14.665,3.272],"q:sheep":[18.236,0.971],"w:duck":[19.507,3.576],"q:duck":[23.383,0.994],"w:chicken":[24.677,3.737],"q:chicken":[28.714,1.094],"w:horse":[30.108,2.718],"q:horse":[33.126,1.118],"w:lion":[34.544,2.983],"q:lion":[37.827,1.048],"w:frog":[39.175,3.797],"q:frog":[43.272,1.043],"w:bird":[44.615,3.309],"q:bird":[48.224,0.914],"w:monkey":[49.438,3.983],"q:monkey":[53.721,1.095],"w:owl":[55.116,3.185],"q:owl":[58.601,0.916],"w:camel":[59.816,3.3],"q:camel":[63.417,1.051],"w:elephant":[64.768,3.328],"q:elephant":[68.396,1.244],"w:fish":[69.94,2.914],"q:fish":[73.154,1.105]},"colors":{"w:red":[0.15,0.523],"q:red":[0.973,0.871],"w:blue":[2.144,0.535],"q:blue":[2.979,0.927],"w:yellow":[4.206,0.623],"q:yellow":[5.13,0.941],"w:green":[6.37,0.568],"q:green":[7.238,0.975],"w:orange":[8.514,0.655],"q:orange":[9.468,1.017],"w:purple":[10.786,0.554],"q:purple":[11.64,0.939],"w:pink":[12.879,0.519],"q:pink":[13.698,0.937],"w:brown":[14.935,0.549],"q:brown":[15.784,0.958],"w:black":[17.042,0.591],"q:black":[17.932,0.965],"w:white":[19.197,0.587],"q:white":[20.084,0.97]},"numbers":{"w:1":[0.15,0.521],"q:1":[0.971,1.114],"w:2":[2.385,0.517],"q:2":[3.202,1.178],"w:3":[4.68,0.5],"q:3":[5.479,1.188],"w:4":[6.968,0.55],"q:4":[7.817,1.227],"w:5":[9.345,0.566],"q:5":[10.211,1.393],"w:6":[11.904,0.655],"q:6":[12.859,1.373],"w:7":[14.532,0.655],"q:7":[15.488,1.252],"w:8":[17.039,0.516],"q:8":[17.855,1.2],"w:9":[19.355,0.575],"q:9":[20.23,1.21],"w:10":[21.74,0.529],"q:10":[22.57,1.224]},"shapes":{"w:circle":[0.15,0.66],"q:circle":[1.11,1.072],"w:square":[2.482,0.674],"q:square":[3.455,1.12],"w:triangle":[4.875,0.79],"q:triangle":[5.965,1.209],"w:star":[7.474,0.612],"q:star":[8.387,1.073],"w:heart":[9.759,0.536],"q:heart":[10.595,1.013],"w:rectangle":[11.909,0.837],"q:rectangle":[13.046,1.243],"w:oval":[14.589,0.532],"q:oval":[15.421,1.003],"w:diamond":[16.724,0.588],"q:diamond":[17.613,1.114]},"fruits":{"w:apple":[0.15,2.108],"q:apple":[2.558,0.998],"w:banana":[3.856,2.232],"q:banana":[6.387,1.108],"w:orange":[7.796,2.204],"q:orange":[10.3,1.139],"w:grapes":[11.739,2.212],"q:grapes":[14.251,1.08],"w:strawberry":[15.631,2.441],"q:strawberry":[18.372,1.229],"w:watermelon":[19.901,2.436],"q:watermelon":[22.637,1.284],"w:mango":[24.22,2.22],"q:mango":[26.74,1.083],"w:pineapple":[28.123,2.346],"q:pineapple":[30.77,1.189],"w:cherry":[32.259,2.14],"q:cherry":[34.698,1.062],"w:lemon":[36.061,2.169],"q:lemon":[38.53,1.032]},"body":{"w:eyes":[0.15,2.716],"q:eyes":[3.166,1.146],"w:ear":[4.612,2.429],"q:ear":[7.34,0.958],"w:nose":[8.599,2.707],"q:nose":[11.606,1.114],"w:mouth":[13.02,2.57],"q:mouth":[15.89,1.04],"w:teeth":[17.23,2.613],"q:teeth":[20.143,1.012],"w:tongue":[21.455,2.649],"q:tongue":[24.403,1.007],"w:hand":[25.71,2.462],"q:hand":[28.472,0.976],"w:arm":[29.748,2.354],"q:arm":[32.402,0.931],"w:leg":[33.632,2.49],"q:leg":[36.422,1.012],"w:foot":[37.734,2.703],"q:foot":[40.737,1.011]},"family":{"w:mommy":[0.15,3.113],"q:mommy":[3.563,0.948],"w:daddy":[4.811,3.113],"q:daddy":[8.224,0.916],"w:brother":[9.44,2.564],"q:brother":[12.304,0.941],"w:sister":[13.545,2.639],"q:sister":[16.484,0.983],"w:baby":[17.766,2.523],"q:baby":[20.59,1.018],"w:grandma":[21.908,3.186],"q:grandma":[25.394,0.988],"w:grandpa":[26.681,3.209],"q:grandpa":[30.191,1.013],"w:family":[31.504,3.02],"q:family":[34.824,1.152]},"abc":{"w:a":[0.15,1.2],"q:a":[1.65,1.176],"w:b":[3.127,1.116],"q:b":[4.543,1.164],"w:c":[6.007,1.36],"q:c":[7.667,1.282],"w:d":[9.248,1.16],"q:d":[10.709,1.23],"w:e":[12.239,1.149],"q:e":[13.687,1.155],"w:f":[15.143,1.336],"q:f":[16.778,1.301],"w:g":[18.38,1.335],"q:g":[20.015,1.289],"w:h":[21.604,1.322],"q:h":[23.225,1.35],"w:i":[24.875,1.324],"q:i":[26.499,1.185],"w:j":[27.983,1.39],"q:j":[29.673,1.306],"w:k":[31.279,1.459],"q:k":[33.038,1.32],"w:l":[34.658,1.366],"q:l":[36.324,1.21],"w:m":[37.834,1.115],"q:m":[39.249,1.2],"w:n":[40.749,1.458],"q:n":[42.507,1.216],"w:o":[44.023,1.394],"q:o":[45.717,1.211],"w:p":[47.228,1.3],"q:p":[48.829,1.228],"w:q":[50.357,1.379],"q:q":[52.035,1.306],"w:r":[53.641,1.242],"q:r":[55.183,1.233],"w:s":[56.716,1.185],"q:s":[58.201,1.313],"w:t":[59.814,1.317],"q:t":[61.432,1.275],"w:u":[63.006,1.297],"q:u":[64.603,1.184],"w:v":[66.087,1.12],"q:v":[67.507,1.207],"w:w":[69.014,1.378],"q:w":[70.693,1.465],"w:x":[72.457,1.398],"q:x":[74.155,1.389],"w:y":[75.845,1.442],"q:y":[77.587,1.279],"w:z":[79.165,1.222],"q:z":[80.688,1.261]}},"img":{"cat":["animals",0,15],"dog":["animals",1,15],"cow":["animals",2,15],"sheep":["animals",3,15],"duck":["animals",4,15],"chicken":["animals",5,15],"horse":["animals",6,15],"lion":["animals",7,15],"frog":["animals",8,15],"bird":["animals",9,15],"monkey":["animals",10,15],"owl":["animals",11,15],"camel":["animals",12,15],"elephant":["animals",13,15],"fish":["animals",14,15],"red":["colors",0,10],"blue":["colors",1,10],"yellow":["colors",2,10],"green":["colors",3,10],"orange_c":["colors",4,10],"purple":["colors",5,10],"pink":["colors",6,10],"brown":["colors",7,10],"black":["colors",8,10],"white":["colors",9,10],"apple":["fruits",0,10],"banana":["fruits",1,10],"orange":["fruits",2,10],"grapes":["fruits",3,10],"strawberry":["fruits",4,10],"watermelon":["fruits",5,10],"mango":["fruits",6,10],"pineapple":["fruits",7,10],"cherry":["fruits",8,10],"lemon":["fruits",9,10],"eyes":["body",0,10],"ear":["body",1,10],"nose":["body",2,10],"mouth":["body",3,10],"teeth":["body",4,10],"tongue":["body",5,10],"hand":["body",6,10],"arm":["body",7,10],"leg":["body",8,10],"foot":["body",9,10],"mommy":["family",0,7],"daddy":["family",1,7],"brother":["family",2,7],"sister":["family",3,7],"baby":["family",4,7],"grandma":["family",5,7],"grandpa":["family",6,7],"ball":["abc",0,18],"egg":["abc",1,18],"hat":["abc",2,18],"icecream":["abc",3,18],"juice":["abc",4,18],"kite":["abc",5,18],"moon":["abc",6,18],"penguin":["abc",7,18],"queen":["abc",8,18],"rainbow":["abc",9,18],"sun":["abc",10,18],"tree":["abc",11,18],"umbrella":["abc",12,18],"van":["abc",13,18],"whale":["abc",14,18],"box":["abc",15,18],"yoyo":["abc",16,18],"zebra":["abc",17,18],"chick":["world",0,33],"chick2":["world",1,33],"star":["world",2,33],"gstar":["world",3,33],"trophy":["world",4,33],"balloon":["world",5,33],"popper":["world",6,33],"sparkles":["world",7,33],"cloud":["world",8,33],"flower":["world",9,33],"tulip":["world",10,33],"evergreen":["world",11,33],"butterfly":["world",12,33],"bee":["world",13,33],"home":["world",14,33],"game":["world",15,33],"gear":["world",16,33],"speaker":["world",17,33],"palette":["world",18,33],"numbers":["world",19,33],"letters":["world",20,33],"heart":["world",21,33],"party":["world",22,33],"clap":["world",23,33],"pointer":["world",24,33],"shapes":["world",25,33],"hug":["world",26,33],"ok":["world",27,33],"rabbit":["world",28,33],"bear":["world",29,33],"panda":["world",30,33],"unicorn":["world",31,33],"turtle":["world",32,33]}};
 const BORDERS = ["#ffd46b","#8fd3ff","#ffa6c9","#9be38a","#c7a8ff","#ffb38a","#7fe0d3"];
 const COLORS = ["#e8304a","#2f6ff0","#1fa94f","#ff8a1f","#9b4dff","#e33fa0","#14a3b0","#c98a00","#5a5ad6","#d6452f"];
 const $app = document.getElementById("app");
@@ -112,24 +187,58 @@ const catById = Object.fromEntries(DATA.cats.map(c => [c.id, c]));
 const store = { get(k, d) { try { const v = localStorage.getItem("ke-" + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
                 set(k, v) { try { localStorage.setItem("ke-" + k, JSON.stringify(v)); } catch (e) {} } };
 let showWords = store.get("words", true);
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/* ---------- sound (Web Audio sprites, one small MP3 per category, loaded on demand) ---------- */
-let ctx = null, cur = null, token = 0;
+/* ---------- pictures (webp spritesheets) ---------- */
+function pic(id, extra = "") {
+  const m = DATA.img[id]; if (!m) return `<i class="pic" ${extra}></i>`;
+  const [sheet, i, n] = m; const pos = n > 1 ? (i * 100 / (n - 1)) : 0;
+  return `<i class="pic" ${extra} style="background-image:url(img-${sheet}.webp);background-size:${n * 100}% 100%;background-position:${pos}% 0"></i>`;
+}
+const famPic = () => `<span class="fam">${pic("mommy")}${pic("daddy")}${pic("sister")}${pic("brother")}</span>`;
+
+/* ---------- world ---------- */
+function world() {
+  const w = document.getElementById("world");
+  const hills = `<svg viewBox="0 0 1000 300" preserveAspectRatio="none">
+    <path fill="var(--h1)" d="M0 150 C150 60 300 70 450 130 S750 190 1000 90 V300 H0Z"/>
+    <path fill="var(--h2)" d="M0 220 C200 140 350 150 520 200 S800 250 1000 170 V300 H0Z"/>
+    <path fill="var(--h3)" d="M0 275 C180 230 420 240 600 265 S850 290 1000 250 V300 H0Z"/></svg>`;
+  const deco = [["flower", "6%", 92, 0], ["tulip", "16%", 70, .6], ["evergreen", "78%", 150, 1.2], ["flower", "90%", 84, 1.8], ["tulip", "60%", 64, .3]]
+    .map(([id, x, s, d]) => `<div class="deco" style="left:${x};font-size:${s}px;animation:sway ${4 + d}s ease-in-out ${d}s infinite">${pic(id)}</div>`).join("");
+  w.innerHTML = `<div class="sun">${pic("sun")}</div>
+    <div class="cloud" style="top:9%;font-size:110px;--t:70s">${pic("cloud")}</div>
+    <div class="cloud" style="top:22%;font-size:70px;--t:95s;animation-delay:-40s">${pic("cloud")}</div>
+    <div class="cloud" style="top:16%;font-size:140px;--t:120s;animation-delay:-75s;opacity:.8">${pic("cloud")}</div>
+    <div class="hills">${hills}${deco}</div>
+    <div class="fly" style="left:30%;bottom:28%">${pic("butterfly")}</div>
+    <div class="fly" style="left:68%;bottom:38%;animation-delay:-3s;font-size:34px">${pic("bee")}</div>`;
+}
+function theme(hue) {
+  const r = document.documentElement.style;
+  if (!hue) { ["--sky1", "--sky2", "--ground", "--h1", "--h2", "--h3"].forEach(v => r.removeProperty(v)); return; }
+  r.setProperty("--sky1", `color-mix(in srgb, ${hue} 22%, #cfeeff)`);
+  r.setProperty("--sky2", `color-mix(in srgb, ${hue} 8%, #f3faff)`);
+  r.setProperty("--ground", `color-mix(in srgb, ${hue} 12%, #fff3cf)`);
+  r.setProperty("--h1", `color-mix(in srgb, ${hue} 30%, #a9e49a)`);
+  r.setProperty("--h2", `color-mix(in srgb, ${hue} 35%, #74cf6f)`);
+  r.setProperty("--h3", `color-mix(in srgb, ${hue} 40%, #4db95a)`);
+}
+
+/* ---------- sound ---------- */
+let ctx = null, cur = null, token = 0, fxGain = null;
 const bufs = {}, pend = {};
 function ensureCtx() {
   if (ctx) return ctx;
-  const AC = window.AudioContext || window.webkitAudioContext;
-  if (!AC) return null;
+  const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
   try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
-  ctx = new AC();
+  ctx = new AC(); fxGain = ctx.createGain(); fxGain.gain.value = 0.55; fxGain.connect(ctx.destination);
   return ctx;
 }
 function unlock() {
   const c = ensureCtx(); if (!c) return;
   if (c.state !== "running") c.resume();
-  if (!unlock.done) { // iOS: play one silent frame inside the gesture
-    const b = c.createBuffer(1, 1, 22050), s = c.createBufferSource(); s.buffer = b; s.connect(c.destination); s.start(0); unlock.done = true;
-  }
+  if (!unlock.done) { const b = c.createBuffer(1, 1, 22050), s = c.createBufferSource(); s.buffer = b; s.connect(c.destination); s.start(0); unlock.done = true; loadSnd("misc").catch(() => {}); }
 }
 ["pointerdown", "touchend", "click"].forEach(ev => document.addEventListener(ev, unlock, true));
 function loadSnd(n) {
@@ -137,119 +246,161 @@ function loadSnd(n) {
   if (!pend[n]) {
     const c = ensureCtx();
     pend[n] = fetch("snd-" + n + ".mp3").then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
-      .then(ab => new Promise((res, rej) => c.decodeAudioData(ab, res, rej)))
-      .then(b => (bufs[n] = b))
+      .then(ab => new Promise((res, rej) => c.decodeAudioData(ab, res, rej))).then(b => (bufs[n] = b))
       .catch(e => { delete pend[n]; throw e; });
   }
   return pend[n];
 }
 function stop() { if (cur) { try { cur.onended = null; cur.stop(); } catch (e) {} cur = null; } }
-async function say(n, key) {
+async function say(n, key, onstart) {
   const my = ++token; stop();
   const seg = DATA.snd[n] && DATA.snd[n][key]; if (!seg || !ensureCtx()) return;
   let b; try { b = await loadSnd(n); } catch (e) { return; }
   if (my !== token) return;
   if (ctx.state !== "running") { try { await ctx.resume(); } catch (e) {} }
-  const s = ctx.createBufferSource(); s.buffer = b; s.connect(ctx.destination);
-  cur = s;
+  const s = ctx.createBufferSource(); s.buffer = b; s.connect(ctx.destination); cur = s;
+  onstart && onstart(seg[1]);
   return new Promise(res => { s.onended = () => { if (cur === s) cur = null; res(); }; s.start(0, seg[0], seg[1]); });
 }
-function chime(happy = true) {
-  const c = ensureCtx(); if (!c) return;
-  const notes = happy ? [523.25, 659.25, 783.99, 1046.5] : [330, 262];
-  notes.forEach((f, i) => {
-    const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + i * (happy ? .09 : .14);
-    o.type = happy ? "triangle" : "sine"; o.frequency.value = f;
-    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(happy ? .18 : .08, t + .02); g.gain.exponentialRampToValueAtTime(.001, t + .45);
-    o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + .5);
-  });
+async function fx(name) {
+  const seg = DATA.snd.misc && DATA.snd.misc["fx:" + name]; if (!seg || !ensureCtx()) return;
+  let b; try { b = await loadSnd("misc"); } catch (e) { return; }
+  const s = ctx.createBufferSource(); s.buffer = b; s.connect(fxGain); s.start(0, seg[0], seg[1]);
 }
 
-/* ---------- pictures ---------- */
+/* ---------- mascot ---------- */
+function chickEl(cls = "") { return `<div class="chick ${cls}" id="chick">${pic("chick")}</div>`; }
+function chickDo(cls) {
+  const c = document.getElementById("chick"); if (!c) return;
+  c.classList.remove("hop", "jump", "no"); void c.offsetWidth; c.classList.add(cls);
+  const p = c.querySelector(".pic"); p.onanimationend = () => c.classList.remove(cls);
+}
+function talking(on, ms) {
+  const c = document.getElementById("chick"), a = document.querySelector(".ask");
+  if (c) c.classList.toggle("talk", on); if (a) a.classList.toggle("quiet", !on);
+  if (on && ms) setTimeout(() => talking(false), ms);
+}
+const speak = (n, key) => say(n, key, d => talking(true, d * 1000));
+
+/* ---------- visuals per item ---------- */
 const SHAPES = {
-  circle: '<circle cx="50" cy="50" r="42"/>',
-  square: '<rect x="11" y="11" width="78" height="78" rx="6"/>',
-  triangle: '<polygon points="50,8 94,88 6,88" stroke-linejoin="round"/>',
-  star: '<polygon points="50,4 61.8,36 95.5,37 69,58 78.5,90.5 50,71.5 21.5,90.5 31,58 4.5,37 38.2,36"/>',
+  circle: '<circle cx="50" cy="50" r="42"/>', square: '<rect x="11" y="11" width="78" height="78" rx="10"/>',
+  triangle: '<path d="M50 8 L94 86 Q96 90 91 90 L9 90 Q4 90 6 86Z"/>',
+  star: '<polygon points="50,4 61.8,36 95.5,37 69,58 78.5,90.5 50,71.5 21.5,90.5 31,58 4.5,37 38.2,36" stroke-linejoin="round"/>',
   heart: '<path d="M50 90C22 70 5 52 12 30 18 12 42 10 50 30 58 10 82 12 88 30 95 52 78 70 50 90Z"/>',
-  rectangle: '<rect x="4" y="24" width="92" height="52" rx="6"/>',
-  oval: '<ellipse cx="50" cy="50" rx="45" ry="31"/>',
-  diamond: '<polygon points="50,3 93,50 50,97 7,50"/>'
+  rectangle: '<rect x="4" y="24" width="92" height="52" rx="10"/>', oval: '<ellipse cx="50" cy="50" rx="45" ry="31"/>',
+  diamond: '<path d="M50 3 L93 47 Q96 50 93 53 L50 97 L7 53 Q4 50 7 47Z"/>'
 };
+function shapeSvg(it) {
+  const id = "g" + it.id;
+  return `<svg class="svg" viewBox="0 0 100 100"><defs>
+    <radialGradient id="${id}" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".25" stop-color="${it.v}" stop-opacity=".2"/><stop offset="1" stop-color="#000" stop-opacity=".28"/></radialGradient></defs>
+    <g fill="${it.v}">${SHAPES[it.id]}</g><g fill="url(#${id})">${SHAPES[it.id]}</g></svg>`;
+}
 function vis(cat, it, i) {
   switch (cat.type) {
-    case "emoji": return `<span class="emo">${it.v}</span>`;
-    case "color": return `<span class="blob${it.id === "white" ? " white" : ""}" style="--c:${it.v}"></span>`;
-    case "shape": return `<svg class="svg" viewBox="0 0 100 100" fill="${it.v}">${SHAPES[it.id]}</svg>`;
+    case "emoji": return it.id === "family" ? famPic() : pic(it.id);
+    case "color": return pic(it.img);
+    case "shape": return shapeSvg(it);
     case "number": { const c = COLORS[(it.v - 1) % COLORS.length];
-      return `<div style="--c:${c};display:flex;flex-direction:column;align-items:center"><span class="num">${it.v}</span><span class="dots">${"<i></i>".repeat(it.v)}</span></div>`; }
+      return `<div style="--c:${c};display:flex;flex-direction:column;align-items:center"><span class="num">${it.v}</span><span class="dots">${pic("star").repeat(it.v)}</span></div>`; }
     case "letter": { const c = COLORS[i % COLORS.length];
-      return `<div style="--c:${c};display:flex;flex-direction:column;align-items:center"><span class="let">${it.v[0]}${it.v[0].toLowerCase()}</span><span class="emo">${it.v[1]}</span></div>`; }
+      return `<div style="--c:${c};display:flex;flex-direction:column;align-items:center;gap:2px"><span class="let">${it.v[0]}${it.v[0].toLowerCase()}</span><span class="letrow">${pic(it.img)}</span></div>`; }
   }
 }
-const letterOnly = (cat, it, i) => cat.type === "letter" ? `<span class="let" style="color:${COLORS[i % COLORS.length]};font-size:clamp(80px,26vw,130px)">${it.v[0]}</span>` : vis(cat, it, i);
+const gameVis = (cat, it, i) => cat.type === "letter" ? `<span class="let" style="color:${COLORS[i % COLORS.length]}">${it.v[0]}</span>`
+  : cat.type === "number" ? `<span class="num" style="--c:${COLORS[(it.v - 1) % COLORS.length]}">${it.v}</span>` : vis(cat, it, i);
 
 /* ---------- screens ---------- */
-function home() {
-  stop();
-  $app.innerHTML = `
-  <div class="bar">
-    <div class="brand"><span style="font-size:34px">🐥</span><b>Kids</b><b>English</b></div>
-    <button class="round small" id="parent" aria-label="للأهل">⚙️</button>
-  </div>
-  <button class="big" id="playall"><span class="e">🎈</span><span>Let's play!<small class="ar">العب</small></span></button>
-  <div class="grid">${DATA.cats.map(c => `
-    <button class="tile" data-c="${c.id}" style="background:${c.bg}">
-      <span class="e">${c.tile}</span><span class="n">${c.en}</span><span class="ar">${c.ar}</span>
-    </button>`).join("")}
-  </div>`;
-  $app.querySelectorAll(".tile").forEach(b => b.onclick = () => { say("misc", "c:" + b.dataset.c); go("c/" + b.dataset.c); });
-  $app.querySelector("#playall").onclick = () => go("g/all");
-  $app.querySelector("#parent").onclick = parentSheet;
-  if (!home.greeted) { home.greeted = true; }
+function render(html, cls = "") {
+  const old = $app.firstElementChild;
+  const go = () => { $app.innerHTML = `<div class="screen ${cls}">${html}</div>`; window.scrollTo(0, 0); };
+  if (old && !reduced) { old.classList.add("out"); setTimeout(go, 160); } else go();
 }
-
+function home() {
+  stop(); theme(null);
+  render(`
+  <div class="bar"><div class="wordmark">${pic("chick2", 'style="font-size:40px"')}<b>Kids</b><b>English</b></div>
+    <button class="orb small" id="parent" aria-label="للأهل">${pic("gear")}</button></div>
+  <div class="hero">
+    <button class="bubble" id="hello">Hello! Let's learn English!<small class="ar">هلا! يلا نتعلم إنجليزي</small></button>
+    ${chickEl()}
+  </div>
+  <button class="cta" id="playall">${pic("game")}<span>Let's play!<small class="ar">العب</small></span></button>
+  <div class="grid">${DATA.cats.map((c, i) => `
+    <button class="tile" data-c="${c.id}" style="--c:${c.hue};--d:${0.05 + i * 0.06}s"><span class="shine"></span>
+      ${c.id === "family" ? `<span class="pic" style="font-size:clamp(84px,24vw,118px);margin-bottom:auto;display:grid;place-items:center">${famPic()}</span>` : pic(c.tile)}
+      <span class="n">${c.en}</span><span class="ar">${c.ar}</span></button>`).join("")}
+  </div>`);
+  setTimeout(() => {
+    $app.querySelectorAll(".tile").forEach(b => b.onclick = () => { fx("pop"); speak("misc", "c:" + b.dataset.c); go("c/" + b.dataset.c); });
+    const h = document.getElementById("hello"); if (h) h.onclick = () => { chickDo("hop"); speak("misc", "hello"); };
+    const ch = document.getElementById("chick"); if (ch) ch.onclick = () => { fx("twinkle"); chickDo("jump"); speak("misc", "hello"); };
+    document.getElementById("playall").onclick = () => { fx("pop"); go("g/all"); };
+    document.getElementById("parent").onclick = parentSheet;
+  }, reduced ? 0 : 170);
+}
 function category(id) {
   const cat = catById[id]; if (!cat) return go("");
-  stop(); loadSnd(id).catch(() => {});
-  $app.innerHTML = `
+  stop(); theme(cat.hue); loadSnd(id).catch(() => {});
+  render(`
   <div class="bar">
-    <button class="round" id="home" aria-label="Home">🏠</button>
-    <div class="title">${cat.en}<small class="ar">${cat.ar}</small></div>
-    <button class="round" id="play" aria-label="Play">🎮</button>
+    <button class="orb" id="home" aria-label="Home">${pic("home")}</button>
+    <div class="title"><div class="en t3">${cat.en}</div><div class="ar">${cat.ar}</div></div>
+    <button class="orb" id="play" aria-label="Play">${pic("game")}</button>
   </div>
   <div class="grid ${showWords ? "" : "nowords"}">${cat.items.map((it, i) => `
-    <button class="card" data-i="${i}" style="--b:${BORDERS[i % BORDERS.length]}">
+    <button class="card" data-i="${i}" style="--b:${BORDERS[i % BORDERS.length]};--d:${Math.min(i, 9) * 0.045}s">
       <div class="vis">${vis(cat, it, i)}</div>
       <div class="w">${cat.type === "letter" ? it.v[0] + " · " + it.en : it.en}</div><div class="ar m">${it.ar}</div>
     </button>`).join("")}
-  </div>`;
-  $app.querySelector("#home").onclick = () => go("");
-  $app.querySelector("#play").onclick = () => go("g/" + id);
-  $app.querySelectorAll(".card").forEach(b => b.onclick = () => {
-    const it = cat.items[+b.dataset.i];
-    b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop");
-    say(id, "w:" + it.id);
-  });
+  </div>`);
+  setTimeout(() => {
+    document.getElementById("home").onclick = () => { fx("whoosh"); go(""); };
+    document.getElementById("play").onclick = () => { fx("pop"); go("g/" + id); };
+    $app.querySelectorAll(".card").forEach(b => b.onclick = () => {
+      const it = cat.items[+b.dataset.i];
+      b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump");
+      sparks(b, BORDERS[+b.dataset.i % BORDERS.length]);
+      b.querySelectorAll(".say").forEach(e => e.remove());
+      const s = document.createElement("div"); s.className = "say"; s.textContent = (cat.type === "letter" ? it.v[0] + " · " : "") + it.en + "!"; b.appendChild(s);
+      s.addEventListener("animationend", () => s.remove());
+      fx("pop"); say(id, "w:" + it.id);
+    });
+  }, reduced ? 0 : 170);
+}
+function sparks(el, color) {
+  for (let i = 0; i < 8; i++) {
+    const s = document.createElement("i"); s.className = "spark";
+    const a = i / 8 * Math.PI * 2, r = 70 + Math.random() * 40;
+    s.style.setProperty("--dx", Math.cos(a) * r + "px"); s.style.setProperty("--dy", Math.sin(a) * r + "px"); s.style.setProperty("--sc", i % 2 ? color : "#ffd34d");
+    el.appendChild(s); s.addEventListener("animationend", () => s.remove());
+  }
 }
 
+/* ---------- game ---------- */
 let game = null;
 function startGame(scope) {
-  stop();
+  stop(); theme(scope === "all" ? "#ffb703" : catById[scope].hue);
   game = { scope, stars: store.get("stars", 0), streak: 0, last: null, cat: null, target: null, misses: 0, busy: false };
-  $app.innerHTML = `
+  render(`
   <div class="bar">
-    <button class="round" id="home" aria-label="Home">🏠</button>
-    <div class="stars">⭐ <span id="sc">${game.stars}</span></div>
-    <button class="round" id="back" aria-label="Back">${scope === "all" ? "🧩" : catById[scope].tile}</button>
+    <button class="orb" id="home" aria-label="Home">${pic("home")}</button>
+    <div class="stars" id="stars">${pic("star")}<span id="sc">${game.stars}</span><span class="prog" id="prog">${"<i></i>".repeat(5)}</span></div>
+    <button class="orb" id="back" aria-label="Back">${scope === "all" ? pic("shapes") : pic(catById[scope].tile)}</button>
   </div>
-  <div class="ask"><button id="ask" aria-label="Listen">🔊</button></div>
-  <div class="opts" id="opts"></div>`;
-  $app.querySelector("#home").onclick = () => go("");
-  $app.querySelector("#back").onclick = () => go(scope === "all" ? "" : "c/" + scope);
-  $app.querySelector("#ask").onclick = () => game && say(game.cat.id, "q:" + game.target.id);
-  say("misc", "play").then(() => round());
+  <div class="gtop">${chickEl("sm")}<button class="ask quiet" id="ask" aria-label="Listen">${pic("speaker")}<span class="wave"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></span></button></div>
+  <div class="opts" id="opts"></div>`);
+  setTimeout(() => {
+    document.getElementById("home").onclick = () => { fx("whoosh"); go(""); };
+    document.getElementById("back").onclick = () => { fx("whoosh"); go(scope === "all" ? "" : "c/" + scope); };
+    document.getElementById("ask").onclick = () => { if (game) { chickDo("hop"); speak(game.cat.id, "q:" + game.target.id); } };
+    document.getElementById("chick").onclick = () => { if (game) { chickDo("hop"); speak(game.cat.id, "q:" + game.target.id); } };
+    prog();
+    speak("misc", "play").then(() => round());
+  }, reduced ? 0 : 170);
 }
+function prog() { document.querySelectorAll("#prog i").forEach((d, i) => d.classList.toggle("on", i < game.stars % 5)); }
 function pick(a, n, not) { const p = a.filter(x => x !== not), out = []; while (out.length < n && p.length) out.push(p.splice(Math.floor(Math.random() * p.length), 1)[0]); return out; }
 function round() {
   if (!game || location.hash.indexOf("#g/") !== 0) return;
@@ -260,41 +411,82 @@ function round() {
   const n = g.streak >= 4 ? 3 : 2;
   const choices = [g.target, ...pick(items, n - 1, g.target)].sort(() => Math.random() - .5);
   g.misses = 0; g.busy = false;
-  const box = document.getElementById("opts");
-  box.className = "opts n" + n;
-  box.innerHTML = choices.map((it, k) => `<button class="opt" data-id="${it.id}" style="--b:${BORDERS[(k + g.streak) % BORDERS.length]}"><div class="vis">${letterOnly(g.cat, it, items.indexOf(it))}</div></button>`).join("");
+  const box = document.getElementById("opts"); box.className = "opts n" + n;
+  box.innerHTML = choices.map((it, k) => `<button class="opt" data-id="${it.id}" style="--b:${BORDERS[(k + g.streak) % BORDERS.length]};--d:${k * 0.08}s">${gameVis(g.cat, it, items.indexOf(it))}</button>`).join("");
   box.querySelectorAll(".opt").forEach(b => b.onclick = () => answer(b));
-  say(g.cat.id, "q:" + g.target.id);
+  loadSnd(g.cat.id).catch(() => {});
+  speak(g.cat.id, "q:" + g.target.id);
 }
 async function answer(b) {
   const g = game; if (!g || g.busy) return;
   if (b.dataset.id === g.target.id) {
     g.busy = true; g.streak++; g.stars++; store.set("stars", g.stars);
-    document.getElementById("sc").textContent = g.stars;
-    b.classList.add("yes"); chime(true); confetti();
-    await say("misc", "p" + (1 + Math.floor(Math.random() * 6)));
-    await say(g.cat.id, "w:" + g.target.id);
-    setTimeout(round, 350);
+    b.classList.add("yes"); fx("win"); chickDo("jump"); confetti(b);
+    flyStar(b).then(() => { fx("ding"); const s = document.getElementById("stars"); if (s) { s.classList.remove("bump"); void s.offsetWidth; s.classList.add("bump"); } document.getElementById("sc").textContent = g.stars; prog(); });
+    const five = g.stars % 5 === 0;
+    if (five) setTimeout(celebrate, 700);
+    await speak("misc", five ? "five" : "p" + (1 + Math.floor(Math.random() * 6)));
+    await speak(g.cat.id, "w:" + g.target.id);
+    const box = document.getElementById("opts"); if (box) box.classList.add("leave");
+    setTimeout(round, five ? 900 : 320);
   } else {
     g.misses++;
     b.classList.remove("no"); void b.offsetWidth; b.classList.add("no");
-    chime(false);
+    fx("nope"); chickDo("no");
     if (g.misses >= 2) document.querySelector(`.opt[data-id="${g.target.id}"]`).classList.add("hint");
-    await say("misc", "again");
-    if (game === g && !g.busy) say(g.cat.id, "q:" + g.target.id);
+    await speak("misc", "again");
+    if (game === g && !g.busy) speak(g.cat.id, "q:" + g.target.id);
   }
 }
-function confetti() {
-  const fx = document.createElement("div"); fx.className = "fx";
-  const set = ["⭐", "🎉", "🌟", "💖", "🎈", "✨"];
-  for (let i = 0; i < 16; i++) {
-    const s = document.createElement("span"); s.textContent = set[i % set.length];
-    s.style.left = Math.random() * 100 + "vw"; s.style.animationDelay = Math.random() * .4 + "s"; s.style.fontSize = 28 + Math.random() * 26 + "px";
-    fx.appendChild(s);
+function flyStar(from) {
+  return new Promise(res => {
+    const a = from.getBoundingClientRect(), tgt = document.getElementById("stars"); if (!tgt) return res();
+    const t = tgt.getBoundingClientRect();
+    const s = document.createElement("div"); s.className = "flystar"; s.innerHTML = pic("gstar");
+    s.style.left = (a.left + a.width / 2 - 27) + "px"; s.style.top = (a.top + a.height / 2 - 27) + "px"; document.body.appendChild(s);
+    const dx = t.left + 30 - (a.left + a.width / 2), dy = t.top + 20 - (a.top + a.height / 2);
+    const anim = s.animate([{ transform: "translate(0,0) scale(.6)", opacity: 0 }, { transform: "translate(0,-40px) scale(1.4)", opacity: 1, offset: .25 },
+      { transform: `translate(${dx * .5}px,${dy * .5 - 120}px) scale(1.1)`, offset: .6 }, { transform: `translate(${dx}px,${dy}px) scale(.5)`, opacity: 1 }],
+      { duration: reduced ? 1 : 900, easing: "cubic-bezier(.3,.7,.3,1)", fill: "forwards" });
+    anim.onfinish = () => { s.remove(); res(); };
+  });
+}
+function celebrate() {
+  fx("fanfare");
+  const big = document.createElement("div"); big.className = "cheer"; big.innerHTML = pic("trophy"); document.body.appendChild(big);
+  setTimeout(() => big.remove(), 1600);
+  for (let i = 0; i < 6; i++) {
+    const b = document.createElement("div"); b.className = "balloon"; b.innerHTML = pic(i % 2 ? "balloon" : "party");
+    b.style.left = (8 + i * 15) + "vw"; b.style.animationDelay = (i * 0.18) + "s"; b.style.setProperty("--rot", (i % 2 ? 12 : -12) + "deg");
+    if (i % 2) b.style.filter = `hue-rotate(${i * 60}deg) drop-shadow(0 10px 10px rgba(0,0,0,.2))`;
+    document.body.appendChild(b); b.addEventListener("animationend", () => b.remove());
   }
-  const big = document.createElement("div"); big.className = "cheer"; big.textContent = ["🥳", "🌟", "👏", "🎉"][Math.floor(Math.random() * 4)];
-  document.body.append(fx, big);
-  setTimeout(() => { fx.remove(); big.remove(); }, 2300);
+}
+/* confetti on canvas */
+const cv = document.getElementById("fx"), cx2 = cv.getContext("2d"); let parts = [], raf = 0;
+function confetti(from) {
+  const r = from.getBoundingClientRect(), x0 = r.left + r.width / 2, y0 = r.top + r.height / 2;
+  cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; cx2.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+  const pal = ["#ff5a5f", "#ffb703", "#2dc653", "#3a86ff", "#ff7ac1", "#9b4dff", "#fff"];
+  for (let i = 0; i < (reduced ? 20 : 70); i++) {
+    const a = Math.random() * Math.PI * 2, v = 6 + Math.random() * 9;
+    parts.push({ x: x0, y: y0, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 6, g: .32, s: 6 + Math.random() * 8, c: pal[i % pal.length], rot: Math.random() * 6, vr: (Math.random() - .5) * .3, life: 70 + Math.random() * 40, k: i % 3 });
+  }
+  if (!raf) tick();
+}
+function tick() {
+  cx2.clearRect(0, 0, innerWidth, innerHeight);
+  parts = parts.filter(p => p.life > 0 && p.y < innerHeight + 40);
+  for (const p of parts) {
+    p.x += p.vx; p.y += p.vy; p.vy += p.g; p.vx *= .985; p.rot += p.vr; p.life--;
+    cx2.save(); cx2.translate(p.x, p.y); cx2.rotate(p.rot); cx2.globalAlpha = Math.min(1, p.life / 25); cx2.fillStyle = p.c;
+    if (p.k === 0) cx2.fillRect(-p.s / 2, -p.s / 3, p.s, p.s / 1.5);
+    else if (p.k === 1) { cx2.beginPath(); cx2.arc(0, 0, p.s / 2, 0, 7); cx2.fill(); }
+    else { cx2.beginPath(); for (let i = 0; i < 5; i++) { const a = i * 1.2566 - 1.57, b = a + .628; cx2.lineTo(Math.cos(a) * p.s / 2, Math.sin(a) * p.s / 2); cx2.lineTo(Math.cos(b) * p.s / 5, Math.sin(b) * p.s / 5); } cx2.fill(); }
+    cx2.restore();
+  }
+  raf = parts.length ? requestAnimationFrame(tick) : 0;
+  if (!raf) cx2.clearRect(0, 0, innerWidth, innerHeight);
 }
 
 /* ---------- parent sheet (Arabic) ---------- */
@@ -309,9 +501,9 @@ function parentSheet() {
   const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
   const el = document.createElement("div"); el.className = "sheet";
   el.innerHTML = `<div class="ar" dir="rtl">
-    <h2>👨‍👩‍👦 للأهل</h2>
+    <h2>${pic("hug", 'style="font-size:34px"')} للأهل</h2>
     <p>اضغط على أي صورة ويسمع طفلك الكلمة بالإنجليزي بصوت واضح.</p>
-    <p>🎈 <b>اللعبة:</b> يسمع «Where is the …؟» ويضغط الصورة الصحيحة. ما فيه وقت ولا خسارة، وكل إجابة صحيحة تعطيه نجمة ⭐.</p>
+    <p>🎮 <b>اللعبة:</b> الكتكوت يسأله «Where is the …؟» ويضغط الصورة الصحيحة. ما فيه وقت ولا خسارة، كل إجابة صحيحة نجمة ⭐ وكل خمس نجوم احتفال.</p>
     <div class="row">
       <button class="btn alt" id="tw">${showWords ? "إخفاء الكلمات المكتوبة" : "إظهار الكلمات المكتوبة"}</button>
       ${installEvt && !standalone ? '<button class="btn" id="inst">📲 ثبّت التطبيق</button>' : ""}
@@ -320,7 +512,7 @@ function parentSheet() {
     ${standalone ? "" : `<h3>📲 إضافته للشاشة الرئيسية</h3>
     <p><b>آيفون:</b> افتحه في Safari ← زر المشاركة ⬆️ ← «إضافة إلى الشاشة الرئيسية».</p>
     <p><b>أندرويد:</b> افتحه في Chrome ← القائمة ⋮ ← «تثبيت التطبيق».</p>`}
-    <p style="color:#8a6d4b;font-size:14px">بدون إعلانات وبدون روابط خارجية. شغّل الصوت في الجوال 🔊</p>
+    <p style="color:#9a7046;font-size:14px">بدون إعلانات وبدون روابط خارجية. شغّل الصوت في الجوال 🔊 · الرسومات: Fluent Emoji (Microsoft, MIT)</p>
     <div class="row"><button class="btn" id="close">تم ✓</button></div>
   </div>`;
   document.body.appendChild(el);
@@ -339,10 +531,9 @@ function route() {
   if (h.startsWith("c/")) category(h.slice(2));
   else if (h.startsWith("g/")) startGame(catById[h.slice(2)] ? h.slice(2) : "all");
   else home();
-  window.scrollTo(0, 0);
 }
 window.addEventListener("hashchange", route);
-route();
+world(); route();
 if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
 </script>
 </body>

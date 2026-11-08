@@ -1,7 +1,7 @@
 // Kids English service worker: app shell on install, all sounds right after, cache-first.
-const VER = "65322659";
+const VER = "a5e675e0";
 const CACHE = "kids-english-" + VER;
-const SHELL = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
+const SHELL = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png", "font-kids.woff2", "img-animals.webp", "img-colors.webp", "img-fruits.webp", "img-body.webp", "img-family.webp", "img-abc.webp", "img-world.webp"];
 const AUDIO = ["snd-misc.mp3", "snd-animals.mp3", "snd-colors.mp3", "snd-numbers.mp3", "snd-shapes.mp3", "snd-fruits.mp3", "snd-body.mp3", "snd-family.mp3", "snd-abc.mp3"];
 
 self.addEventListener("install", (e) => {
