@@ -534,7 +534,11 @@ function route() {
 }
 window.addEventListener("hashchange", route);
 world(); route();
-if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+if ("serviceWorker" in navigator) {
+  const had = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (had && !window.__rl) { window.__rl = true; location.reload(); } });
+  addEventListener("load", () => navigator.serviceWorker.register("sw.js").then(r => r.update()).catch(() => {}));
+}
 </script>
 </body>
 </html>
